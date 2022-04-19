@@ -13,7 +13,7 @@ const updateProductsController = new UpdateProductController();
 
 productsRoutes.get('/', getAllProductsController.handle);
 productsRoutes.post('/', createProductController.handle);
-productsRoutes.delete('/delete/:id', deleteProductController.handle);
-productsRoutes.patch('/update/:id', updateProductsController.handle);
+productsRoutes.delete('/:id', deleteProductController.handle);
+productsRoutes.patch('/:id', updateProductsController.handle);
 
 export { productsRoutes };
