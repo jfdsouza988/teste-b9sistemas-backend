@@ -21,6 +21,12 @@ class CustomersRepository implements ICustomersRepository {
 
     return customer;
   }
+
+  async listAllCustomers(): Promise<Customer[]> {
+    const customers = await prisma.customer.findMany();
+
+    return customers;
+  }
 }
 
 export { CustomersRepository };
