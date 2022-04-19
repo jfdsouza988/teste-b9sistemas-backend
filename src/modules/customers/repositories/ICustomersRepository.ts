@@ -4,6 +4,7 @@ import { ICreateCustomerDTO } from '../dtos/ICreateCustomerDTO';
 interface ICustomersRepository {
   create({ name, cpf }: ICreateCustomerDTO): Promise<Customer>;
   findByCpf(cpf: string): Promise<Customer>;
+  findById(id: string): Promise<Customer>;
   listAllCustomers(): Promise<Customer[]>;
 }
 

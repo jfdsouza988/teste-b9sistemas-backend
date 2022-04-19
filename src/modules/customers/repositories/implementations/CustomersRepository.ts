@@ -27,6 +27,16 @@ class CustomersRepository implements ICustomersRepository {
 
     return customers;
   }
+
+  async findById(id: string): Promise<Customer> {
+    const customer = await prisma.customer.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return customer;
+  }
 }
 
 export { CustomersRepository };
