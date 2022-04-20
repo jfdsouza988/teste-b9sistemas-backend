@@ -104,6 +104,9 @@
                   },
                   "quantity": {
                     "type": "integer"
+                  },
+                  "price": {
+                    "type": "number"
                   }
                 },
                 "example": {
@@ -150,6 +153,9 @@
                       },
                       "quantity": {
                         "type": "integer"
+                      },
+                      "price": {
+                        "type": "number"
                       },
                       "created_at": {
                         "type": "date-time"
@@ -202,6 +208,9 @@
                     "quantity": {
                       "type": "integer"
                     },
+                    "price": {
+                      "type": "number"
+                    },
                     "created_at": {
                       "type": "date-time"
                     },
@@ -249,6 +258,9 @@
                     },
                     "quantity": {
                       "type": "integer"
+                    },
+                    "price": {
+                      "type": "number"
                     },
                     "created_at": {
                       "type": "date-time"

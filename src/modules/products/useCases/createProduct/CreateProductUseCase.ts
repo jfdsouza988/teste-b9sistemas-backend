@@ -6,6 +6,7 @@ import { IProductsRepository } from '../../repositories/IProductsRepository';
 interface IRequest {
   title: string;
   quantity?: number;
+  price: number;
 }
 
 @injectable()
@@ -14,7 +15,7 @@ class CreateProductUseCase {
     @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
   ) {}
-  async execute({ title, quantity = 1 }: IRequest) {
+  async execute({ title, quantity = 1, price }: IRequest) {
     const slug = slugify(title, { lower: true });
 
     const productWithSameSlug = await this.productsRepository.findBySlug(slug);
@@ -27,6 +28,7 @@ class CreateProductUseCase {
       title,
       slug,
       quantity,
+      price,
     });
 
     return product;

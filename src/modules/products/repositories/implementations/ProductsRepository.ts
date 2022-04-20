@@ -4,12 +4,18 @@ import { ICreateProductDTO } from '../../dtos/ICreateProductDTO';
 import { IProductsRepository } from '../IProductsRepository';
 
 class ProductsRepository implements IProductsRepository {
-  async create({ title, slug, quantity }: ICreateProductDTO): Promise<Product> {
+  async create({
+    title,
+    slug,
+    quantity,
+    price,
+  }: ICreateProductDTO): Promise<Product> {
     const product = await prisma.product.create({
       data: {
         title,
         slug,
         quantity,
+        price,
       },
     });
 
@@ -40,13 +46,14 @@ class ProductsRepository implements IProductsRepository {
     return product;
   }
 
-  async update(id: string, quantity: number): Promise<Product> {
+  async update(id: string, quantity: number, price: number): Promise<Product> {
     const product = await prisma.product.update({
       where: {
         id,
       },
       data: {
         quantity,
+        price,
       },
     });
 

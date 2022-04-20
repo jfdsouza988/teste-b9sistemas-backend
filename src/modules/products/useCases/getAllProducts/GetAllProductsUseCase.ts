@@ -8,9 +8,9 @@ class GetAllProductsUseCase {
     private productsRepository: IProductsRepository,
   ) {}
   async execute() {
-    const customers = await this.productsRepository.listAllProducts();
+    const products = await this.productsRepository.listAllProducts();
 
-    return customers;
+    return products;
   }
 }
 
