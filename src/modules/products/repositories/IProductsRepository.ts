@@ -7,7 +7,12 @@ interface IProductsRepository {
   findById(id: string): Promise<Product>;
   listAllProducts(): Promise<Product[]>;
   delete(id: string): Promise<Product>;
-  update(id: string, quantity: number, price: number): Promise<Product>;
+  update(
+    id: string,
+    title: string,
+    quantity: number,
+    price: number,
+  ): Promise<Product>;
 }
 
 export { IProductsRepository };

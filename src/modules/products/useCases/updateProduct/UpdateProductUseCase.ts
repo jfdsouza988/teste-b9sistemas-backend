@@ -3,6 +3,7 @@ import { IProductsRepository } from '../../repositories/IProductsRepository';
 
 interface IRequest {
   id: string;
+  title: string;
   quantity: number;
   price: number;
 }
@@ -13,8 +14,13 @@ class UpdateProductUseCase {
     @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
   ) {}
-  async execute({ id, quantity, price }: IRequest) {
-    const product = await this.productsRepository.update(id, quantity, price);
+  async execute({ id, title, quantity, price }: IRequest) {
+    const product = await this.productsRepository.update(
+      id,
+      title,
+      quantity,
+      price,
+    );
 
     return product;
   }
