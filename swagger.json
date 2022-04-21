@@ -9,83 +9,6 @@
     }
   },
   "paths": {
-    "/customer": {
-      "post": {
-        "tags": [
-          "Customer"
-        ],
-        "summary": "Create a customer",
-        "description": "Create a new customer",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "cpf": {
-                    "type": "string"
-                  }
-                },
-                "example": {
-                  "name": "customer name sample",
-                  "cpf": "customer unique identifier sample"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Customer already exists"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Customer"
-        ],
-        "summary": "List all customers",
-        "description": "List all customers",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "cpf": {
-                        "type": "string"
-                      },
-                      "created_at": {
-                        "type": "date-time"
-                      },
-                      "updated_at": {
-                        "type": "date-time"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/product": {
       "post": {
         "tags": [
@@ -111,7 +34,8 @@
                 },
                 "example": {
                   "title": "product title sample",
-                  "quantity": 1
+                  "quantity": 1,
+                  "price": 49.90
                 }
               }
             }
@@ -151,7 +75,7 @@
                       "slug": {
                         "type": "string"
                       },
-                      "quantity": {
+                      "stock": {
                         "type": "integer"
                       },
                       "price": {
@@ -187,7 +111,7 @@
             "type": "string",
             "required": true
           }
-        ],        
+        ],
         "responses": {
           "200": {
             "description": "Product deleted",
@@ -205,7 +129,7 @@
                     "slug": {
                       "type": "string"
                     },
-                    "quantity": {
+                    "stock": {
                       "type": "integer"
                     },
                     "price": {
@@ -217,11 +141,11 @@
                     "updated_at": {
                       "type": "date-time"
                     }
-                  }                
+                  }
                 }
               }
             }
-          }          
+          }
         }
       },
       "patch": {
@@ -238,7 +162,28 @@
             "type": "string",
             "required": true
           }
-        ],        
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": {
+                    "type": "integer"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                },
+                "example": {
+                  "quantity": 10,
+                  "price": 49.90
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Product updated",
@@ -256,7 +201,7 @@
                     "slug": {
                       "type": "string"
                     },
-                    "quantity": {
+                    "stock": {
                       "type": "integer"
                     },
                     "price": {
@@ -268,11 +213,56 @@
                     "updated_at": {
                       "type": "date-time"
                     }
-                  }                
+                  }
                 }
               }
             }
-          }          
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "List a specific product",
+        "description": "List a specific product",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      },
+                      "stock": {
+                        "type": "integer"
+                      },
+                      "price": {
+                        "type": "number"
+                      },
+                      "created_at": {
+                        "type": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -289,16 +279,28 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "customerId": {
-                    "type": "string"
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
                   },
-                  "productId": {
-                    "type": "string"
+                  "totalPrice": {
+                    "type": "number"
                   }
                 },
                 "example": {
-                  "customerId": "customer unique identifier sample",
-                  "productId": "product unique identifier sample"
+                  "products": [
+                    {
+                      "id": "product 1 Id",
+                      "quantity": 20
+                    },
+                    {
+                      "id": "product 2 Id",
+                      "quantity": 40
+                    }
+                  ],
+                  "totalPrice": 219.90
                 }
               }
             }
@@ -309,10 +311,75 @@
             "description": "Created"
           },
           "400": {
-            "description": "Customer or product not found"
+            "description": "Product(s) not found"
           }
         }
-      }      
-    }        
-  }  
+      },
+      "get": {
+        "tags": [
+          "Purchases"
+        ],
+        "summary": "List all purchases",
+        "description": "List all purchases",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "totalPrice": {
+                        "type": "number"
+                      },
+                      "created_at": {
+                        "type": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "date-time"
+                      },
+                      "products": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "slug": {
+                              "type": "string"
+                            },
+                            "stock": {
+                              "type": "integer"
+                            },
+                            "price": {
+                              "type": "number"
+                            },
+                            "created_at": {
+                              "type": "date-time"
+                            },
+                            "updated_at": {
+                              "type": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
