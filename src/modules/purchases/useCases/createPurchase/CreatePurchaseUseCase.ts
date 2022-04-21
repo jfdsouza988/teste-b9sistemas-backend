@@ -1,12 +1,16 @@
 import { inject, injectable } from 'tsyringe';
 import { AppError } from '../../../../shared/errors/AppError';
-import { ICustomersRepository } from '../../../customers/repositories/ICustomersRepository';
 import { IProductsRepository } from '../../../products/repositories/IProductsRepository';
 import { IPurchasesRepository } from '../../repositories/IPurchasesRepository';
 
+interface IProducts {
+  id: string;
+  quantity: number;
+}
+
 interface IRequest {
-  customerId: string;
-  productId: string;
+  products: IProducts[];
+  totalPrice: number;
 }
 
 @injectable()
@@ -16,28 +20,28 @@ class CreatePurchaseUseCase {
     private purchasesRepository: IPurchasesRepository,
     @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
-    @inject('CustomersRepository')
-    private customersRepository: ICustomersRepository,
   ) {}
-  async execute({ customerId, productId }: IRequest) {
-    const product = await this.productsRepository.findById(productId);
+  async execute({ products, totalPrice }: IRequest) {
+    const productsId: string[] = [];
 
-    if (!product) {
-      throw new AppError('Product not found');
-    }
+    products.map((product) => {
+      return productsId.push(product.id);
+    });
 
-    const customer = await this.customersRepository.findById(customerId);
+    const existsProducts = await this.productsRepository.findByIds(productsId);
 
-    if (!customer) {
-      throw new AppError('Customer not found');
+    if (!existsProducts) {
+      throw new AppError('Products not found');
     }
 
     const purchase = await this.purchasesRepository.create({
-      customerId,
-      productId,
+      products: existsProducts,
+      totalPrice,
     });
 
-    return purchase;
+    await this.purchasesRepository.updateProducts(existsProducts, purchase.id);
+
+    await this.productsRepository.updateStock(products);
   }
 }
 

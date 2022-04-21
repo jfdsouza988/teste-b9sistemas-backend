@@ -4,13 +4,13 @@ import { CreatePurchaseUseCase } from './CreatePurchaseUseCase';
 
 export class CreatePurchaseController {
   async handle(request: Request, response: Response) {
-    const { productId, customerId } = request.body;
+    const { products, totalPrice } = request.body;
 
     const createPurchaseUseCase = container.resolve(CreatePurchaseUseCase);
 
     const result = await createPurchaseUseCase.execute({
-      productId,
-      customerId,
+      products,
+      totalPrice,
     });
 
     return response.status(201).json(result);

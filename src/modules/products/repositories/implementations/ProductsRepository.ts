@@ -1,7 +1,7 @@
 import { Product } from '.prisma/client';
 import { prisma } from '../../../../database/prismaClients';
 import { ICreateProductDTO } from '../../dtos/ICreateProductDTO';
-import { IProductsRepository } from '../IProductsRepository';
+import { IProducts, IProductsRepository } from '../IProductsRepository';
 
 class ProductsRepository implements IProductsRepository {
   async create({
@@ -14,7 +14,7 @@ class ProductsRepository implements IProductsRepository {
       data: {
         title,
         slug,
-        quantity,
+        stock: quantity,
         price,
       },
     });
@@ -46,19 +46,13 @@ class ProductsRepository implements IProductsRepository {
     return product;
   }
 
-  async update(
-    id: string,
-    title: string,
-    quantity: number,
-    price: number,
-  ): Promise<Product> {
+  async update(id: string, quantity: number, price: number): Promise<Product> {
     const product = await prisma.product.update({
       where: {
         id,
       },
       data: {
-        title,
-        quantity,
+        stock: quantity,
         price,
       },
     });
@@ -74,6 +68,33 @@ class ProductsRepository implements IProductsRepository {
     });
 
     return product;
+  }
+
+  async findByIds(products: string[]): Promise<Product[]> {
+    const result = await prisma.product.findMany({
+      where: {
+        id: {
+          in: products,
+        },
+      },
+    });
+
+    return result;
+  }
+
+  async updateStock(products: IProducts[]): Promise<void> {
+    products.map(async (product) => {
+      await prisma.product.update({
+        where: {
+          id: product.id,
+        },
+        data: {
+          stock: {
+            decrement: product.quantity,
+          },
+        },
+      });
+    });
   }
 }
 

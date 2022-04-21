@@ -1,6 +1,8 @@
+import { Product } from '@prisma/client';
+
 interface ICreatePurchaseDTO {
-  productId: string;
-  customerId: string;
+  products: Product[];
+  totalPrice: number;
 }
 
 export { ICreatePurchaseDTO };

@@ -7,29 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id String @id @default(uuid())
-
-  name String?
-
-  cpf String @unique
-
-  purchases Purchase[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
-  @@map("customer")
-}
-
 model Product {
-  id       String @id @default(uuid())
-  title    String
-  slug     String @unique
-  price    Float
-  quantity Int?
-
-  purchasedOn Purchase[]
+  id          String     @id @default(uuid())
+  title       String
+  slug        String     @unique
+  price       Float
+  stock       Int?
+  purchasedOn Purchase[] @relation("productsPurchase")
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
@@ -38,13 +22,9 @@ model Product {
 }
 
 model Purchase {
-  id String @id @default(uuid())
-
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId String
-
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
+  id         String    @id @default(uuid())
+  products   Product[] @relation("productsPurchase")
+  totalPrice Float
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt

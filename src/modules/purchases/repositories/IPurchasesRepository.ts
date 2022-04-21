@@ -1,8 +1,10 @@
-import { Purchase } from '@prisma/client';
+import { Product, Purchase } from '@prisma/client';
 import { ICreatePurchaseDTO } from '../dtos/ICreatePurchaseDTO';
 
 interface IPurchasesRepository {
-  create({ productId, customerId }: ICreatePurchaseDTO): Promise<Purchase>;
+  create({ products, totalPrice }: ICreatePurchaseDTO): Promise<Purchase>;
+  updateProducts(products: Product[], purchaseId: string): Promise<void>;
+  listAllPurchases(): Promise<Purchase[]>;
 }
 
 export { IPurchasesRepository };
