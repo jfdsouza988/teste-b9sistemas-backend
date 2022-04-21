@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="DoutorMultas" title="DoutorMultas" src=".github/logo.jpeg" width="200px" height="200px"/>  
+  <img alt="B9Sistemas" title="B9Sistemas" src=".github/logo.jpeg" width="200px" height="200px"/>  
 </h1>
 
 <p align="center">
